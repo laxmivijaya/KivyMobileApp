@@ -1,69 +1,20 @@
-from kivy.uix.screenmanager import Screen, ScreenManager
-from kivymd.app import MDApp
-from kivy.lang import Builder
+from kivy.app import App
+from kivy.uix.widget import Widget
+from kivy.core.window import Window
+from kivy.graphics import Ellipse, Color
 
-screen_helper = """
-ScreenManager:
-    MenuScreen:
-    ProfileScreen:
-    UploadScreen:
-    
-<MenuScreen>:
-    name: 'menu'
-    MDRectangleFlatButton:
-        text: 'Profile'
-        pos_hint: {'center_x':0.5, 'center_y':0.5}
-        on_press: root.manager.current = 'profile'
-    MDRectangleFlatButton:
-        text: 'Upload'
-        pos_hint: {'center_x':0.5,'center_y':0.4}
-        on_press: root.manager.current = 'upload'
-        
-<ProfileScreen>:
-    name: 'profile'
-    MDLabel:
-        text:'Welcome'
-        align: 'center'
-    MDRectangleFlatButton:
-        text: 'Back'
-        pos_hint: {'center_x':0.5, 'center_y':0.2}
-        on_press: root.manager.current = 'menu'
-        
-<UploadScreen>:
-    name: 'upload'
-    MDLabel:
-        text:'Lets Upload some files'
-        align: 'center'
-    MDRectangleFlatButton:
-        text: 'Back'
-        pos_hint: {'center_x':0.5, 'center_y':0.2}
-        on_press: root.manager.current = 'menu'
-        
-"""
+Window.clearcolor = (0,0,0,1)
 
+class PaintWindow(Widget):
+    def on_touch_down(self, touch):
+        self.canvas.add(Color(rgb=(1,0,0)))
+        d = 30
+        self.canvas.add(Ellipse(pos=(touch.x, touch.y), size=(d,d)))
 
-class MenuScreen(Screen):
-    pass
-
-
-class ProfileScreen(Screen):
-    pass
-
-
-class UploadScreen(Screen):
-    pass
-
-
-sm = ScreenManager()
-sm.add_widget(MenuScreen(name='menu'))
-sm.add_widget(ProfileScreen(name='profile'))
-sm.add_widget(UploadScreen(name='upload'))
-
-
-class DemoApp(MDApp):
+class PaintApp(App):
     def build(self):
-        screen = Builder.load_string(screen_helper)
-        return screen
+        return PaintWindow()
+
+PaintApp().run()
 
 
-DemoApp().run()
